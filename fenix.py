@@ -85,3 +85,6 @@ class FenixAPISingleton(object):
 		r = self._api_request('person')
 		return r.json()
 
+	def get_about(self):
+		r = self._api_request('about')
+		return r.json()
