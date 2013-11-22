@@ -3,17 +3,26 @@ FENIX SDK source code :)
 """
 
 import requests
+from ConfigParser import SafeConfigParser
+
 
 class FenixAPI(object):
 	def __init__(self):
-		"""Hardcoded now... TODO: Read from a properties file"""
-		self.app_secret = 'zHaiWfLxfW1Wt8rbwusDAx8lt24Z4PvG0tyzSS7607nxRZb23mTNBqVZzab9KGzU45RMH4z2tn8e4PJ7xDB8OSuTzBE0dBs8BN3vKatTb4rX1BNWcTq'
-		self.client_id = '7065221202521'
-		self.redirect_uri = 'http://localhost:8000/login'
-		self.base_url = 'https://fenix.ist.utl.pt/'
+		""" Read settings from configuration file"""
+		parser = SafeConfigParser(allow_no_value = True)
+		section = 'fenixedu'
+		parser.read('fenixedu.ini')
+
+		self.client_id = parser.get(section, 'client_id') or 'troll'
+		self.redirect_uri = parser.get(section, 'redirect_uri')
+		self.client_secret = parser.get(section, 'client_secret')
+		
+		self.base_url = parser.get(section, 'base_url')
+		self.api_endpoint = parser.get(section, 'api_endpoint')
+		self.api_version = parser.get(section, 'api_version')
+		
+		""" API specific """
 		self.oauth_endpoint = 'oauth/'
-		self.api_endpoint = 'api/fenix/'
-		self.api_version = 1
 		self.access_token = ''
 		self.error_key = 'error'
 
@@ -37,7 +46,7 @@ class FenixAPI(object):
 
 	def set_code(self, code):
 		url = self.base_url + self.oauth_endpoint + 'access_token'
-		r_params = {'client_id' : self.client_id, 'client_secret' : self.app_secret, 'redirect_uri' : self.redirect_uri, 'code' : code, 'grant_type' : 'authorization_code'}
+		r_params = {'client_id' : self.client_id, 'client_secret' : self.client_secret, 'redirect_uri' : self.redirect_uri, 'code' : code, 'grant_type' : 'authorization_code'}
 		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
 		r = requests.post(url, params = r_params, headers = r_headers)
 		r_object = r.json()

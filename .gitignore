@@ -34,3 +34,6 @@ nosetests.xml
 .mr.developer.cfg
 .project
 .pydevproject
+
+# Don't send a config file with concrete values!!
+fenixedu.ini
