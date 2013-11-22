@@ -8,7 +8,7 @@ Install the sdk:
 
 Create a configurations file in your application project root:
 - Copy file fenixedu.sample.ini to a new one called fenixedu.ini
-<code>cp fenixedu.sample.ini fenixedu.sample</code>
+<code>cp fenixedu.sample.ini fenixedu.ini</code>
 - Fill the fields as needed
 
 How to use it:
