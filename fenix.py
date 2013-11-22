@@ -39,6 +39,19 @@ class FenixAPISingleton(object):
 		self.access_token = ''
 		self.error_key = 'error'
 
+		""" API endpoints """
+		self.person_endpoint = 'person'
+		self.about_endpoint = 'about'
+		self.courses_endpoint = 'courses'
+		self.evaluations_endpoint = 'evaluations'
+		self.schedule_endpoint = 'schedule'
+		self.groups_endpoint = 'groups'
+		self.students_endpoint = 'students'
+		self.degrees_endpoint = 'degrees'
+		self.calendar_endpoint = 'calendar'
+		self.payments_endpoint = 'payments'
+		self.spaces_endpoint = 'spaces'
+
 	def _get_api_url(self):
 		return self.base_url + self.api_endpoint + 'v' + str(self.api_version)
 
@@ -82,9 +95,67 @@ class FenixAPISingleton(object):
 
 	""" API methods """
 	def get_person(self):
-		r = self._api_request('person')
+		r = self._api_request(self.person_endpoint)
 		return r.json()
 
 	def get_about(self):
-		r = self._api_request('about')
+		r = self._api_request(self.about_endpoint)
 		return r.json()
+
+	def get_course(self, id):
+		r = self._api_request(self.courses_endpoint + '/' + id)
+		return r.json()
+
+	def get_course_evaluation(self, id):
+		r = self._api_request(self.courses_endpoint + '/' + id + '/' + self.evaluations_endpoint)
+		return r.json()
+
+	def get_course_schedule(self, id):
+		r = self._api_request(self.courses_endpoint + '/' + id + '/' + self.schedule_endpoint)
+		return r.json()
+
+	def get_course_students(self, id):
+		r = self._api_request(self.courses_endpoint + '/' + id + '/' + self.students_endpoint)
+		return r.json()
+
+	def get_degrees(self, id):
+		r = self._api_request(self.degrees_endpoint)
+		return r.json()
+
+	def get_degree(self, id):
+		r = self._api_request(self.degrees_endpoint + '/' + id)
+		return r.json()
+
+	def get_degree_courses(self, id):
+		r = self._api_request(self.degrees_endpoint + '/' + id + '/' + self.courses_endpoint)
+		return r.json()
+	
+	def get_degree_courses(self, id):
+		r = self._api_request(self.degrees_endpoint + '/' + id + '/' + self.courses_endpoint)
+		return r.json()
+
+	def get_classes_calendar(self):
+		r = self._api_request(self.person_endpoint + '/' + self.calendar_endpoint + '/' + self.classes_endpoint)
+		return r.json()
+
+	def get_evaluations_calendar(self):
+		r = self._api_request(self.person_endpoint + '/' + self.calendar_endpoint + '/' + self.evaluations_endpoint)
+		return r.json()
+
+	def get_courses(self):
+		r = self._api_request(self.person_endpoint + '/' + self.courses_endpoint)
+		return r.json()
+
+	def get_evaluations(self):
+		r = self._api_request(self.person_endpoint + '/' + self.evaluations_endpoint)
+		return r.json()
+
+	def get_person_payments(self):
+		r = self._api_request(self.person_endpoint + '/' + self.payments_endpoint)
+		return r.json()
+
+	def get_spaces(self):
+		r = self._api_request(self.spaces_endpoint)
+		return r.json()
+
+
