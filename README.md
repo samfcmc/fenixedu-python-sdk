@@ -7,7 +7,7 @@ Create a configurations file:
 
 How to use it:
 - Instatiate an API object in your code
-<code>api = FenixAPI()</code>
+<code>api = FenixAPISingleton()</code>
 - Get the authentication url
 <code>url = api.get_authentication_url()</code>
 - Redirect your user to that url
