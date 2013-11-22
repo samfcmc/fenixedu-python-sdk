@@ -5,8 +5,21 @@ FENIX SDK source code :)
 import requests
 from ConfigParser import SafeConfigParser
 
+class FenixAPISingleton(object):
+	__instance = None
 
-class FenixAPI(object):
+	"""Make this class a singleton"""
+	def __new__(cls):
+		if FenixAPISingleton.__instance is None:
+			FenixAPISingleton.__instance = object.__new__(cls)
+		return FenixAPISingleton.__instance
+
+	def set_val(self, val):
+		self.val = val
+
+	def get_val(self):
+		return self.val
+
 	def __init__(self):
 		""" Read settings from configuration file"""
 		parser = SafeConfigParser(allow_no_value = True)
