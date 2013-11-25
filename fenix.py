@@ -57,7 +57,12 @@ class FenixAPISingleton(object):
 		return self.base_url + self.api_endpoint + 'v' + str(self.api_version)
 
 	def _request(self, url, req_params=None):
-		r = requests.get(url, params=req_params)
+		r = requests.get(url, params = req_params)
+		print(r.url)
+		return r
+
+	def _put_request(self, url, req_params=None):
+		r = requests.put(url, params = req_params)
 		print(r.url)
 		return r
 
@@ -66,6 +71,12 @@ class FenixAPISingleton(object):
 		url = self._get_api_url() + '/' + endpoint
 		req_params['access_token'] = self.access_token
 		return self._request(url, req_params)
+
+	def _api_put_private_request(self, endpoint, req_params=None):
+		req_params = req_params or {}
+		url = self._get_api_url() + '/' + endpoint
+		req_params['access_token'] = self.access_token
+		return self._put_request(endpoint, req_params)
 
 	def _api_public_request(self, endpoint, req_params=None):
 		url = self._get_api_url() + '/' + endpoint
@@ -193,4 +204,5 @@ class FenixAPISingleton(object):
 	def get_payments(self):
 		r = self._api_private_request(self.person_endpoint + '/' + self.payments_endpoint)
 		return r.json()
+
 
