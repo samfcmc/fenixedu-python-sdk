@@ -243,4 +243,7 @@ class FenixAPISingleton(object):
 			params = None
 		r = self._api_private_request(self.person_endpoint + '/' + self.evaluations_endpoint + '/' + id, params, Requests.PUT)
 		return r
-
+	
+	def get_evaluation(self, id):
+		r = self._api_private_request(self.person_endpoint + '/' + self.evaluations_endpoint + '/' + id)
+		return r

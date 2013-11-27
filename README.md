@@ -54,3 +54,48 @@ Create a configurations file in your application project root:
 - Start using the api like this:
 <br>
 <code>person = api.get_person()</code>
+
+<b>Available methods</b>
+<br>
+- All endpoint in FenixEdu API have a method in this sdk
+<br>
+- <b> Mapping between FenixAPISingleton api methods and original api endpoints </b>
+<br>
+API endpoint -> SDK FenixAPISingleton Methods
+<br>
+GET /about -> <code>get_about</code>
+<br>
+GET /courses/{id} -> <code>get_course(id)</code>
+<br>
+GET /courses/{id}/evaluations -> <code>get_course_evaluations(id)</code>
+<br>
+GET /courses/{id}/groups -> <code>get_course_groups(id)</code>
+<br>
+GET /courses/{id}/schedule ->  <code>get_course_schedule(id)</code>
+<br>
+GET /courses/{id}/students ->  <code>get_course_students(id)</code>
+<br>
+GET /degrees -> <code>get_degrees()</code>
+<br>
+GET /degrees/{id} ->  <code>get_degree(id)</code>
+<br>
+GET /degrees/{id}/courses -> <code>get_degree_courses(id)</code>
+<br>
+GET /person -> <code>get_person()</code>
+<br>
+GET /person/calendar/classes -> <code>get_classes_calendar()</code>
+<br>
+GET /person/calendar/evaluations -> <code>get_evaluations_calendar()</code>
+<br>
+GET /person/courses -> <code>get_courses(sem, year)</code>
+<br>
+GET /person/evaluations -> <code>get_evaluations()</code>
+<br>
+PUT /person/evaluations/{id} <code>put_evaluation(id)</code>
+<br>
+GET /person/payments <code>get_payments()</code>
+<br>
+GET /spaces <code>get_spaces()</code>
+<br>
+GET /spaces/{id} <code>get_space(id)</code>
+<br>
