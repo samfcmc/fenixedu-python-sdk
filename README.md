@@ -47,7 +47,7 @@ Create a configurations file in your application project root:
 <code>redirect_uri?code=[code]</code>
 - Get the code parameter in url and do:
 <br>
-<code>api.setCode(code)</code>
+<code>api.set_code(code)</code>
 <br>
 - It will request an access token and returns no erros if everything is fine
 <br>
@@ -91,12 +91,12 @@ GET /person/courses -> <code>get_courses(sem, year)</code>
 <br>
 GET /person/evaluations -> <code>get_evaluations()</code>
 <br>
-PUT /person/evaluations/{id} <code>put_evaluation(id)</code>
+PUT /person/evaluations/{id} -> <code>put_evaluation(id)</code>
 <br>
-GET /person/payments <code>get_payments()</code>
+GET /person/payments -> <code>get_payments()</code>
 <br>
-GET /spaces <code>get_spaces()</code>
+GET /spaces -> <code>get_spaces()</code>
 <br>
-GET /spaces/{id} <code>get_space(id)</code>
+GET /spaces/{id} -> <code>get_space(id)</code>
 <br>
 More info about endpoints in <a href="http://fenixedu.org/dev/api/">FenixEdu API website</a>
