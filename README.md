@@ -99,3 +99,4 @@ GET /spaces <code>get_spaces()</code>
 <br>
 GET /spaces/{id} <code>get_space(id)</code>
 <br>
+More info about endpoints in <a href="http://fenixedu.org/dev/api/">FenixEdu API website</a>
