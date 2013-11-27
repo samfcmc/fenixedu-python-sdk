@@ -51,6 +51,6 @@ Create a configurations file in your application project root:
 <br>
 - It will request an access token and returns no erros if everything is fine
 <br>
--Start using the api like this:
+- Start using the api like this:
 <br>
 <code>person = api.get_person()</code>
