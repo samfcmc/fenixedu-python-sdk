@@ -84,17 +84,17 @@ class FenixAPISingleton(object):
 		print('API request: ' + r.url)
 		return r
 
-	def _api_private_request(self, endpoint, req_params=None, method=None):
+	def _api_private_request(self, endpoint, req_params=None, method=None, headers=None):
 		req_params = req_params or {}
 		url = self._get_api_url() + '/' + endpoint
 		req_params['access_token'] = self.access_token
-		r = self._request(url, req_params, method)
+		r = self._request(url, req_params, method, headers = headers)
 		""" Check if everything was fine
 			If not: Try to refresh the access token """
 		if r.status_code == 401:
 			self._refresh_access_token()
 			""" Repeat the request """
-			r = self._request(url, req_params, method)
+			r = self._request(url, req_params, method, headers = headers)
 		return r
 	
 	def _refresh_access_token(self):
@@ -108,9 +108,9 @@ class FenixAPISingleton(object):
 		self.access_token = refresh['access_token']
 		self.exprires = refresh['expires_in']
 
-	def _api_public_request(self, endpoint, req_params=None, method=None):
+	def _api_public_request(self, endpoint, req_params=None, method=None, headers=None):
 		url = self._get_api_url() + '/' + endpoint
-		return self._request(url, req_params, method)
+		return self._request(url, req_params, method, headers = headers)
 
 	def get_authentication_url(self):
 		url = self.base_url + self.oauth_endpoint + 'userdialog?client_id=' + self.client_id + '&redirect_uri=' + self.redirect_uri
