@@ -5,6 +5,14 @@ FENIX SDK source code :)
 import requests
 from ConfigParser import SafeConfigParser
 
+""" HTTP Methods """
+class Requests(object):
+	GET = 0
+	POST = 1
+	PUT = 2
+	DELETE = 3
+
+
 class FenixAPISingleton(object):
 	__instance = None
 
@@ -26,7 +34,7 @@ class FenixAPISingleton(object):
 		section = 'fenixedu'
 		parser.read('fenixedu.ini')
 
-		self.client_id = parser.get(section, 'client_id') or 'troll'
+		self.client_id = parser.get(section, 'client_id')
 		self.redirect_uri = parser.get(section, 'redirect_uri')
 		self.client_secret = parser.get(section, 'client_secret')
 		
@@ -35,8 +43,10 @@ class FenixAPISingleton(object):
 		self.api_version = parser.get(section, 'api_version')
 		
 		""" API specific """
-		self.oauth_endpoint = 'oauth/'
+		self.oauth_endpoint = 'oauth'
+		self.access_token_endpoint = 'access_token'
 		self.access_token = ''
+		self.refresh_token = ''
 		self.error_key = 'error'
 
 		""" API endpoints """
@@ -52,45 +62,65 @@ class FenixAPISingleton(object):
 		self.payments_endpoint = 'payments'
 		self.spaces_endpoint = 'spaces'
 		self.classes_endpoint = 'classes'
+		self.refresh_token_endpoint = 'refresh_token'
 
 	def _get_api_url(self):
 		return self.base_url + self.api_endpoint + 'v' + str(self.api_version)
 
-	def _request(self, url, req_params=None):
-		r = requests.get(url, params = req_params)
-		print(r.url)
+	""" Method to make a http request
+		If no method parameter is passed it will make a Get
+			request by default """
+	def _request(self, url, params=None, method=None, headers=None):
+
+		if method is None or method == Requests.GET:
+			r = requests.get(url, params = params, headers = headers)
+		elif method == Requests.POST:
+			r = requests.post(url, params = params, headers = headers)
+		elif method == Requests.PUT:
+			r = requests.put(url, params = params, headers = headers)
+		elif method == Requests.DELETE:
+			r = requests.delete(url, params = params, headers = headers)
+		
+		print('API request: ' + r.url)
 		return r
 
-	def _put_request(self, url, req_params=None):
-		r = requests.put(url, params = req_params)
-		print(r.url)
-		return r
-
-	def _api_private_request(self, endpoint, req_params=None):
+	def _api_private_request(self, endpoint, req_params=None, method=None):
 		req_params = req_params or {}
 		url = self._get_api_url() + '/' + endpoint
 		req_params['access_token'] = self.access_token
-		return self._request(url, req_params)
+		r = self._request(url, req_params, method)
+		""" Check if everything was fine
+			If not: Try to refresh the access token """
+		if r.status_code == 401:
+			self._refresh_access_token()
+			""" Repeat the request """
+			r = self._request(url, req_params, method)
+		return r
+	
+	def _refresh_access_token(self):
+		print('Refreshing access token')
+		url = self.base_url + '/' + self.oauth_endpoint + '/' + self.refresh_token_endpoint
+		req_params = {'client_id' : self.client_id, 'client_secret' : self.client_secret, 'refresh_token' : self.refresh_token, 
+				'grant_type' : 'authorization_code', 'redirect_uri' : self.redirect_uri, 'code' : self.code}
+		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
+		r = self._request(url, req_params, Requests.POST, headers = r_headers)
+		refresh = r.json()
+		self.access_token = refresh['access_token']
+		self.exprires = refresh['expires_in']
 
-	def _api_put_private_request(self, endpoint, req_params=None):
-		req_params = req_params or {}
+	def _api_public_request(self, endpoint, req_params=None, method=None):
 		url = self._get_api_url() + '/' + endpoint
-		req_params['access_token'] = self.access_token
-		return self._put_request(endpoint, req_params)
-
-	def _api_public_request(self, endpoint, req_params=None):
-		url = self._get_api_url() + '/' + endpoint
-		return self._request(url, req_params)
+		return self._request(url, req_params, method)
 
 	def get_authentication_url(self):
 		url = self.base_url + self.oauth_endpoint + 'userdialog?client_id=' + self.client_id + '&redirect_uri=' + self.redirect_uri
 		return url
 
 	def set_code(self, code):
-		url = self.base_url + self.oauth_endpoint + 'access_token'
+		url = self.base_url + self.oauth_endpoint + '/' + self.access_token_endpoint
 		r_params = {'client_id' : self.client_id, 'client_secret' : self.client_secret, 'redirect_uri' : self.redirect_uri, 'code' : code, 'grant_type' : 'authorization_code'}
 		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
-		r = requests.post(url, params = r_params, headers = r_headers)
+		r = self._request(url, params = r_params, method = Requests.POST, headers = r_headers)
 		r_object = r.json()
 		if self.error_key in r_object:
 			print('Error tryng to get an access token')
@@ -99,6 +129,7 @@ class FenixAPISingleton(object):
 			self.access_token = r_object['access_token']
 			self.refresh_token = r_object['refresh_token']
 			self.exprires = r_object['expires_in']
+			self.code = code
 
 	def set_access_token(self, token):
 		self.access_token = token
@@ -205,4 +236,11 @@ class FenixAPISingleton(object):
 		r = self._api_private_request(self.person_endpoint + '/' + self.payments_endpoint)
 		return r.json()
 
+	def put_evaluation(self, id, enrol = None):
+		if enrol:
+			params = {'enrol' : enrol}
+		else:
+			params = None
+		r = self._api_private_request(self.person_endpoint + '/' + self.evaluations_endpoint + '/' + id, params, Requests.PUT)
+		return r
 

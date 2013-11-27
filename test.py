@@ -1,8 +1,14 @@
 """ Functions to call the api and test it """
 
+import sys
 import fenix
 
-api = fenix.FenixAPI()
+api = fenix.FenixAPISingleton()
 print('Testing Fenix API SDK Python')
 auth_url = api.get_authentication_url()
 print(auth_url)
+api.set_code(sys.argv[1])
+print('Access token: ' + api.get_access_token())
+print('Refresh token: ' + api.get_refresh_token())
+api._refresh_access_token()
+print('New access token: ' + api.get_access_token())
