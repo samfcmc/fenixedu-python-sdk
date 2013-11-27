@@ -1,11 +1,12 @@
 fenix_python_sdk
 ================
 
-Install the sdk:
-- Clone this repo
-- Run setup file
+<b>Instalation</b>
+<br>
 <code>python setup.py install</code>
+<br>
 
+<b>Configuration</b>
 Create a configurations file in your application project root:
 <br>
 - Copy file fenixedu.sample.ini to a new one called fenixedu.ini
@@ -13,10 +14,7 @@ Create a configurations file in your application project root:
 <code>cp fenixedu.sample.ini fenixedu.ini</code>
 <br>
 - Edit fenixedu.ini file according to your app info
-
-<b>Instalation</b>
 <br>
-<code>python setup.py install</code>
 
 <b>Usage:</b>
 <br>
