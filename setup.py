@@ -10,5 +10,6 @@ setup(name='FenixEduPythonAPISDK',
 		author='Samuel Coelho',
 		author_email='samuelfcmc@gmail.com',
 		url='https://github.com/samfcmc/fenixedu-python-sdk',
-		py_modules=['fenix']
+		py_modules=['fenix'],
+		install_requires=['requests']
 		)
