@@ -87,9 +87,9 @@ GET /spaces/{id} -> <code>get_space(id,[day])</code>
 <br>
 GET /person -> <code>get_person()</code>
 <br>
-GET /person/calendar/classes -> <code>get_classes_calendar([format])</code>
+GET /person/calendar/classes -> <code>get_classes_calendar()</code>
 <br>
-GET /person/calendar/evaluations -> <code>get_evaluations_calendar([format])</code>
+GET /person/calendar/evaluations -> <code>get_evaluations_calendar()</code>
 <br>
 GET /person/courses -> <code>get_courses([sem], [year])</code>
 <br>

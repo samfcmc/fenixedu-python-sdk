@@ -207,22 +207,12 @@ class FenixAPISingleton(object):
 		r = self._api_private_request(self.person_endpoint)
 		return r.json()
 
-	def get_classes_calendar(self, format=None):
-		if format:
-			params = {'format' : format}
-		else:
-			params = None
-
-		r = self._api_private_request(self.person_endpoint + '/' + self.calendar_endpoint + '/' + self.classes_endpoint, params)
+	def get_classes_calendar(self):
+		r = self._api_private_request(self.person_endpoint + '/' + self.calendar_endpoint + '/' + self.classes_endpoint)
 		return r.json()
 
 	def get_evaluations_calendar(self, format=None):
-		if format:
-			params = {'format' : format}
-		else:
-			params = None
-
-		r = self._api_private_request(self.person_endpoint + '/' + self.calendar_endpoint + '/' + self.evaluations_endpoint, params)
+		r = self._api_private_request(self.person_endpoint + '/' + self.calendar_endpoint + '/' + self.evaluations_endpoint)
 		return r.json()
 
 	def get_courses(self, sem=None, year=None):
