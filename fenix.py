@@ -244,9 +244,9 @@ class FenixAPISingleton(object):
 		r = self._api_private_request(self.person_endpoint + '/' + self.payments_endpoint)
 		return r.json()
 
-	def put_evaluation(self, id, enrol = None):
-		if enrol:
-			params = {'enrol' : enrol}
+	def enrol_in_evaluation(self, id, enrol_action = None):
+		if enrol_action:
+			params = {'enrol' : enrol_action}
 		else:
 			params = None
 		r = self._api_private_request(self.person_endpoint + '/' + self.evaluations_endpoint + '/' + id, params, Requests.PUT)
