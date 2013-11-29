@@ -1,7 +1,7 @@
 fenix_python_sdk
 ================
 
-<b>Instalation</b>
+<b>Installation</b>
 <br>
 - Install the dependencies with pip
 <br>
