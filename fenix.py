@@ -108,9 +108,9 @@ class FenixAPISingleton(object):
 		self.access_token = refresh['access_token']
 		self.exprires = refresh['expires_in']
 
-	def _api_public_request(self, endpoint, req_params=None, method=None, headers=None):
+	def _api_public_request(self, endpoint, params=None, method=None, headers=None):
 		url = self._get_api_url() + '/' + endpoint
-		return self._request(url, req_params, method, headers = headers)
+		return self._request(url, params, method, headers = headers)
 
 	def get_authentication_url(self):
 		url = self.base_url + self.oauth_endpoint + 'userdialog?client_id=' + self.client_id + '&redirect_uri=' + self.redirect_uri
@@ -192,6 +192,14 @@ class FenixAPISingleton(object):
 	
 	def get_spaces(self):
 		r = self._api_public_request(self.spaces_endpoint)
+		return r.json()
+
+	def get_space(self, id, day=None):
+		if day:
+			params = {'day' : day}
+		else:
+			params = None
+		r = self._api_public_request(self.spaces_endpoint + '/' + id, params = params)
 		return r.json()
 
 	""" Private Endpoints """
