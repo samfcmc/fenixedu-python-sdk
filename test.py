@@ -12,3 +12,5 @@ print('Access token: ' + api.get_access_token())
 print('Refresh token: ' + api.get_refresh_token())
 api._refresh_access_token()
 print('New access token: ' + api.get_access_token())
+
+print(api.get_space('2465311230082'))
