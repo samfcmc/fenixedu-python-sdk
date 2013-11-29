@@ -3,13 +3,7 @@ fenix_python_sdk
 
 <b>Installation</b>
 <br>
-- Install the dependencies with pip
-<br>
-<code>pip install -r reqs.txt</code>
-<br>
-- Install the fenix module
-<br>
-<code>python setup.py install</code>
+<code>pip install fenix_api_sdk</code>
 <br>
 
 <b>Configuration</b>
