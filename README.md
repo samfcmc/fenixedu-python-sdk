@@ -85,7 +85,7 @@ GET /degrees/{id}/courses -> <code>get_degree_courses(id, [year])</code>
 <br>
 GET /spaces -> <code>get_spaces()</code>
 <br>
-GET /spaces/{id} -> <code>get_space(id,[day])</code>br>
+GET /spaces/{id} -> <code>get_space(id,[day])</code>
 <br>
 <b>- Private methods (You need to get an access token before calling one of this methods)</b>
 <br>
