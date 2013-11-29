@@ -63,6 +63,8 @@ Create a configurations file in your application project root:
 <br>
 API endpoint -> SDK FenixAPISingleton Methods
 <br>
+<b>- Public methods </b>
+<br>
 GET /about -> <code>get_about</code>
 <br>
 GET /courses/{id} -> <code>get_course(id)</code>
@@ -75,28 +77,32 @@ GET /courses/{id}/schedule ->  <code>get_course_schedule(id)</code>
 <br>
 GET /courses/{id}/students ->  <code>get_course_students(id)</code>
 <br>
-GET /degrees -> <code>get_degrees()</code>
+GET /degrees -> <code>get_degrees([year])</code>
 <br>
-GET /degrees/{id} ->  <code>get_degree(id)</code>
+GET /degrees/{id} ->  <code>get_degree(id, [year])</code>
 <br>
-GET /degrees/{id}/courses -> <code>get_degree_courses(id)</code>
-<br>
-GET /person -> <code>get_person()</code>
-<br>
-GET /person/calendar/classes -> <code>get_classes_calendar()</code>
-<br>
-GET /person/calendar/evaluations -> <code>get_evaluations_calendar()</code>
-<br>
-GET /person/courses -> <code>get_courses(sem, year)</code>
-<br>
-GET /person/evaluations -> <code>get_evaluations()</code>
-<br>
-PUT /person/evaluations/{id} -> <code>put_evaluation(id)</code>
-<br>
-GET /person/payments -> <code>get_payments()</code>
+GET /degrees/{id}/courses -> <code>get_degree_courses(id, [year])</code>
 <br>
 GET /spaces -> <code>get_spaces()</code>
 <br>
-GET /spaces/{id} -> <code>get_space(id)</code>
+GET /spaces/{id} -> <code>get_space(id,[day])</code>br>
+<br>
+<b>- Private methods (You need to get an access token before calling one of this methods)</b>
+<br>
+GET /person -> <code>get_person()</code>
+<br>
+GET /person/calendar/classes -> <code>get_classes_calendar([format])</code>
+<br>
+GET /person/calendar/evaluations -> <code>get_evaluations_calendar([format])</code>
+<br>
+GET /person/courses -> <code>get_courses([sem], [year])</code>
+<br>
+GET /person/evaluations -> <code>get_evaluations()</code>
+<br>
+GET /person/payments -> <code>get_payments()</code>
+<br>
+PUT /person/evaluations/{id} -> <code>put_evaluation(id, [enrol])</code>
+<br>
+
 <br>
 More info about endpoints in <a href="http://fenixedu.org/dev/api/">FenixEdu API website</a>
