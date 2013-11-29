@@ -57,6 +57,8 @@ Create a configurations file in your application project root:
 
 <b>Available methods</b>
 <br>
+[x] - Optional parameters
+<br>
 - All endpoint in FenixEdu API have a method in this sdk
 <br>
 - <b> Mapping between FenixAPISingleton api methods and original api endpoints </b>
@@ -101,6 +103,6 @@ GET /person/evaluations -> <code>get_evaluations()</code>
 <br>
 GET /person/payments -> <code>get_payments()</code>
 <br>
-PUT /person/evaluations/{id} -> <code>put_evaluation(id, [enrol])</code>
+PUT /person/evaluations/{id} -> <code>enrol_in_evaluation(id, [enrol_action])</code>
 
 More info about all available endpoints in <a href="http://fenixedu.org/dev/api/">FenixEdu API website</a>
