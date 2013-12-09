@@ -113,7 +113,7 @@ class FenixAPISingleton(object):
 		return self._request(url, params, method, headers = headers)
 
 	def get_authentication_url(self):
-		url = self.base_url + self.oauth_endpoint + 'userdialog?client_id=' + self.client_id + '&redirect_uri=' + self.redirect_uri
+		url = self.base_url + self.oauth_endpoint + '/userdialog?client_id=' + self.client_id + '&redirect_uri=' + self.redirect_uri
 		return url
 
 	def set_code(self, code):
