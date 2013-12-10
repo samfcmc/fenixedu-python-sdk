@@ -216,7 +216,7 @@ class FenixAPISingleton(object):
 		r = self._api_private_request(self.person_endpoint + '/' + self.calendar_endpoint + '/' + self.evaluations_endpoint)
 		return r.json()
 
-	def get_curriculum(self, format=None):
+	def get_curriculum(self):
 		r = self._api_private_request(self.person_endpoint + '/' + self.curriculum_endpoint)
 		return r.json()
 
