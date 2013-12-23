@@ -98,5 +98,8 @@ GET /person/evaluations -> <code>get_evaluations()</code>
 GET /person/payments -> <code>get_payments()</code>
 <br>
 PUT /person/evaluations/{id} -> <code>enrol_in_evaluation(id, [enrol_action])</code>
+<br>
+GET /person/curriculum -> <code>get_curriculum</code>
+<br>
 
 More info about all available endpoints in <a href="http://fenixedu.org/dev/api/">FenixEdu API website</a>
