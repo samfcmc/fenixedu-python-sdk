@@ -3,7 +3,11 @@ FENIX SDK source code :)
 """
 
 import requests
-from ConfigParser import SafeConfigParser
+try:
+	from ConfigParser import SafeConfigParser
+except ImportError:
+	#For python version 2.x
+	from configparser import SafeConfigParser
 
 """ HTTP Methods """
 class Requests(object):
@@ -30,7 +34,7 @@ class FenixAPISingleton(object):
 
 	def __init__(self):
 		""" Read settings from configuration file"""
-		parser = SafeConfigParser(allow_no_value = True)
+		parser = SafeConfigParser()
 		section = 'fenixedu'
 		parser.read('fenixedu.ini')
 
