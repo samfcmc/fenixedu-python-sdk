@@ -62,6 +62,7 @@ class FenixAPISingleton(object):
 		self.payments_endpoint = 'payments'
 		self.spaces_endpoint = 'spaces'
 		self.classes_endpoint = 'classes'
+		self.curriculum_endpoint = 'curriculum'
 		self.refresh_token_endpoint = 'refresh_token'
 
 	def _get_api_url(self):
@@ -213,6 +214,10 @@ class FenixAPISingleton(object):
 
 	def get_evaluations_calendar(self, format=None):
 		r = self._api_private_request(self.person_endpoint + '/' + self.calendar_endpoint + '/' + self.evaluations_endpoint)
+		return r.json()
+
+	def get_curriculum(self):
+		r = self._api_private_request(self.person_endpoint + '/' + self.curriculum_endpoint)
 		return r.json()
 
 	def get_courses(self, sem=None, year=None):
