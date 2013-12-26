@@ -181,7 +181,7 @@ class FenixAPISingleton(object):
 
 	def get_degree(self, id, year=None):
 		if year:
-			params = {'year', year}
+			params = {'year' : year}
 		else:
 			params = None
 
