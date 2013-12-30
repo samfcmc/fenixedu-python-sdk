@@ -7,7 +7,10 @@ fenix_python_sdk
 <br>
 
 <b>Configuration</b>
+
 Create a configurations file in your application project root:
+<br>
+<b>Clone this repo or just download fenixedu.sample.ini file</b>
 <br>
 - Copy file fenixedu.sample.ini to a new one called fenixedu.ini
 <br>
