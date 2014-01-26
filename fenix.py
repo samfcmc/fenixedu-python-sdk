@@ -177,6 +177,16 @@ class FenixAPISingleton(object):
 
 	def get_token_expires(self):
 		return self.exprires
+	
+	#Logout
+	def logout(self):
+		self.access_token = ''
+
+	def user_is_authenticated(self):
+		if self.access_token:
+			return True
+		else:
+			return False
 
 	""" API methods """
 	""" Public Endpoints """
