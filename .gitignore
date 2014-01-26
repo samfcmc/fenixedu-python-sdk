@@ -37,3 +37,6 @@ nosetests.xml
 
 # Don't send a config file with concrete values!!
 fenixedu.ini
+
+# Files created to test api
+test*.py
