@@ -51,6 +51,30 @@ Create a configurations file in your application project root:
 - Start using the api like this:
 <br>
 <code>person = api.get_person()</code>
+<br>
+
+<b>Multiple users using the same client</b>
+<br>
+As you have noticed, the client is a singleton. So you can't use with it if you have multiple users using your application at the same time (like a web application).
+<br>
+To use it with with multiple users:
+<br>
+- Instatiate a user object
+<br>
+<code>user = fenix.User()</code>
+<br>
+- When you get the code from the api (After the user logged in), you can pass the user object to set_code method like this:
+<br>
+<code>api.set_code(code, user)</code>
+<br>
+- After this, if nothing goes wrong, the user object will contain the access token, refresh token, etc.
+<br>
+- Now, you can use the private methods with that user. Example:
+<br>
+<code>person = api.get_person(user=user)</code>
+<br>
+- You can instatiate as many users as you want. If you don't instatiate an user, the FenixAPISingleton will use a singleton user object.
+<br>
 
 <b>Available methods</b>
 <br>
@@ -88,21 +112,21 @@ GET /spaces/{id} -> <code>get_space(id,[day])</code>
 <br>
 <b>- Private methods (You need to get an access token before calling one of this methods)</b>
 <br>
-GET /person -> <code>get_person()</code>
+GET /person -> <code>get_person([user])</code>
 <br>
-GET /person/calendar/classes -> <code>get_classes_calendar()</code>
+GET /person/calendar/classes -> <code>get_person_classes_calendar([user])</code>
 <br>
-GET /person/calendar/evaluations -> <code>get_evaluations_calendar()</code>
+GET /person/calendar/evaluations -> <code>get_person_evaluations_calendar([user])</code>
 <br>
-GET /person/courses -> <code>get_courses([sem], [year])</code>
+GET /person/courses -> <code>get_person_courses([sem], [year], [user])</code>
 <br>
-GET /person/evaluations -> <code>get_evaluations()</code>
+GET /person/evaluations -> <code>get_person_evaluations([user])</code>
 <br>
-GET /person/payments -> <code>get_payments()</code>
+GET /person/payments -> <code>get_person_payments([user])</code>
 <br>
-PUT /person/evaluations/{id} -> <code>enrol_in_evaluation(id, [enrol_action])</code>
+PUT /person/evaluations/{id} -> <code>enrol_in_evaluation(id, [enrol_action], [user])</code>
 <br>
-GET /person/curriculum -> <code>get_curriculum()</code>
+GET /person/curriculum -> <code>get_person_curriculum([user])</code>
 <br>
 
 More info about all available endpoints in <a href="http://fenixedu.org/dev/api/">FenixEdu API website</a>
