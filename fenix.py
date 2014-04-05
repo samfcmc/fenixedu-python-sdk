@@ -264,13 +264,11 @@ class FenixAPISingleton(object):
 		r = self._api_private_request(self.person_endpoint + '/' + self.curriculum_endpoint, user=user)
 		return r.json()
 
-	def get_person_courses(self, sem=None, year=None, user=None):
+	def get_person_courses(self, academicTerm=None, user=None):
 		params = {}
 
-		if sem:
-			params['sem'] = sem
-		if year:
-			params['year'] = year
+		if academicTerm:
+			params['academicTerm'] = academicTerm
 
 		r = self._api_private_request(self.person_endpoint + '/' + self.courses_endpoint, params, user=user)
 		return r.json()
