@@ -127,7 +127,7 @@ class FenixAPISingleton(object):
 		print('Refreshing access token')
 		url = self.base_url + '/' + self.oauth_endpoint + '/' + self.refresh_token_endpoint
 		req_params = {'client_id' : self.client_id, 'client_secret' : self.client_secret, 'refresh_token' : user.refresh_token, 
-				'grant_type' : 'authorization_code', 'redirect_uri' : self.redirect_uri, 'code' : user.code}
+				'grant_type' : 'refresh_token', 'redirect_uri' : self.redirect_uri, 'code' : user.code}
 		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
 		r = self._request(url, req_params, Requests.POST, headers = r_headers)
 		refresh = r.json()
