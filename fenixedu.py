@@ -25,17 +25,17 @@ class User(object):
 		self.refresh_token = refresh_token
 		self.token_expires = token_expires
 
-class FenixAPISingleton(object):
+class FenixEduAPISingleton(object):
 	__instance = None
 
 	__single_user = None
 
 	"""Make this class a singleton"""
 	def __new__(cls):
-		if FenixAPISingleton.__instance is None:
-			FenixAPISingleton.__instance = object.__new__(cls)
-			FenixAPISingleton.__single_user = User()
-		return FenixAPISingleton.__instance
+		if FenixEduAPISingleton.__instance is None:
+			FenixEduAPISingleton.__instance = object.__new__(cls)
+			FenixEduAPISingleton.__single_user = User()
+		return FenixEduAPISingleton.__instance
 
 	def set_val(self, val):
 		self.val = val
@@ -109,8 +109,8 @@ class FenixAPISingleton(object):
 		url = self._get_api_url() + '/' + endpoint
 
 		if user is None:
-			access_token = FenixAPISingleton.__single_user.access_token
-			user = FenixAPISingleton.__single_user
+			access_token = FenixEduAPISingleton.__single_user.access_token
+			user = FenixEduAPISingleton.__single_user
 		else:
 			access_token = user.access_token
 
@@ -155,9 +155,9 @@ class FenixAPISingleton(object):
 
 		# Just a single user
 		elif user is None:
-			FenixAPISingleton.__single_user.access_token = r_object['access_token']
-			FenixAPISingleton.__single_user.refresh_token = r_object['refresh_token']
-			FenixAPISingleton.__single_user.exprires = r_object['expires_in']
+			FenixEduAPISingleton.__single_user.access_token = r_object['access_token']
+			FenixEduAPISingleton.__single_user.refresh_token = r_object['refresh_token']
+			FenixEduAPISingleton.__single_user.exprires = r_object['expires_in']
 			self.code = code
 
 		# User has been passed (Using multiple users in same application)
