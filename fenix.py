@@ -52,16 +52,16 @@ class FenixAPISingleton(object):
 		self.client_id = parser.get(section, 'client_id')
 		self.redirect_uri = parser.get(section, 'redirect_uri')
 		self.client_secret = parser.get(section, 'client_secret')
-		
+
 		self.base_url = parser.get(section, 'base_url')
 		self.api_endpoint = parser.get(section, 'api_endpoint')
 		self.api_version = parser.get(section, 'api_version')
-		
+
 		""" API specific """
 		self.oauth_endpoint = 'oauth'
 		self.access_token_endpoint = 'access_token'
 		self.error_key = 'error'
-		
+
 		""" User specific"""
 		self.access_token = ''
 		self.refresh_token = ''
@@ -69,6 +69,7 @@ class FenixAPISingleton(object):
 		""" API endpoints """
 		self.person_endpoint = 'person'
 		self.about_endpoint = 'about'
+		self.academic_terms_endpoint = 'academicterms'
 		self.courses_endpoint = 'courses'
 		self.evaluations_endpoint = 'evaluations'
 		self.schedule_endpoint = 'schedule'
@@ -99,7 +100,7 @@ class FenixAPISingleton(object):
 			r = requests.put(url, params = params, headers = headers)
 		elif method == Requests.DELETE:
 			r = requests.delete(url, params = params, headers = headers)
-		
+
 		print('API request: ' + r.url)
 		return r
 
@@ -122,11 +123,11 @@ class FenixAPISingleton(object):
 			""" Repeat the request """
 			r = self._request(url, req_params, method, headers = headers)
 		return r
-	
+
 	def _refresh_access_token(self, user):
 		print('Refreshing access token')
 		url = self.base_url + '/' + self.oauth_endpoint + '/' + self.refresh_token_endpoint
-		req_params = {'client_id' : self.client_id, 'client_secret' : self.client_secret, 'refresh_token' : user.refresh_token, 
+		req_params = {'client_id' : self.client_id, 'client_secret' : self.client_secret, 'refresh_token' : user.refresh_token,
 				'grant_type' : 'refresh_token', 'redirect_uri' : self.redirect_uri, 'code' : user.code}
 		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
 		r = self._request(url, req_params, Requests.POST, headers = r_headers)
@@ -151,14 +152,14 @@ class FenixAPISingleton(object):
 		if self.error_key in r_object:
 			print('Error tryng to get an access token')
 			print(r_object)
-		
+
 		# Just a single user
 		elif user is None:
 			FenixAPISingleton.__single_user.access_token = r_object['access_token']
 			FenixAPISingleton.__single_user.refresh_token = r_object['refresh_token']
 			FenixAPISingleton.__single_user.exprires = r_object['expires_in']
 			self.code = code
-		
+
 		# User has been passed (Using multiple users in same application)
 		else:
 			user.access_token = r_object['access_token']
@@ -177,7 +178,7 @@ class FenixAPISingleton(object):
 
 	def get_token_expires(self):
 		return self.exprires
-	
+
 	#Logout
 	def logout(self):
 		self.access_token = ''
@@ -192,6 +193,10 @@ class FenixAPISingleton(object):
 	""" Public Endpoints """
 	def get_about(self):
 		r = self._api_public_request(self.about_endpoint)
+		return r.json()
+
+	def get_academic_terms(self):
+		r = self._api_public_request(self.academic_terms_endpoint)
 		return r.json()
 
 	def get_course(self, id):
@@ -234,7 +239,7 @@ class FenixAPISingleton(object):
 	def get_degree_courses(self, id):
 		r = self._api_public_request(self.degrees_endpoint + '/' + id + '/' + self.courses_endpoint)
 		return r.json()
-	
+
 	def get_spaces(self):
 		r = self._api_public_request(self.spaces_endpoint)
 		return r.json()
@@ -288,8 +293,7 @@ class FenixAPISingleton(object):
 			params = None
 		r = self._api_private_request(self.person_endpoint + '/' + self.evaluations_endpoint + '/' + id, params, Requests.PUT, user=user)
 		return r
-	
+
 	def get_person_evaluation(self, id, user=None):
 		r = self._api_private_request(self.person_endpoint + '/' + self.evaluations_endpoint + '/' + id, user=user)
 		return r
-
