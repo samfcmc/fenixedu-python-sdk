@@ -3,7 +3,7 @@ fenix_python_sdk
 
 <b>Installation</b>
 <br>
-<code>pip install fenix_api_sdk</code>
+<code>pip install fenixedu_api_sdk</code>
 <br>
 
 <b>Configuration</b>
@@ -27,11 +27,11 @@ Create a configurations file in your application project root:
 <br>
 - Import python sdk
 <br>
-<code>import fenix</code>
+<code>import fenixedu</code>
 <br>
 - Instatiate an API object in your source code
 <br>
-<code>api = fenix.FenixAPISingleton()</code>
+<code>api = fenixedu.FenixEduAPISingleton()</code>
 <br>
 - Get the authentication url
 <br>
