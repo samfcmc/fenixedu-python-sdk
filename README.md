@@ -90,6 +90,8 @@ API endpoint -> SDK FenixAPISingleton Methods
 <br>
 GET /about -> <code>get_about</code>
 <br>
+GET /academicterms -> <code>get_academic_terms</code>
+<br>
 GET /courses/{id} -> <code>get_course(id)</code>
 <br>
 GET /courses/{id}/evaluations -> <code>get_course_evaluations(id)</code>
