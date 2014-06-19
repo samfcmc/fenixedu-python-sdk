@@ -4,12 +4,12 @@
 
 from distutils.core import setup
 
-setup(name='fenix_api_sdk',
-		version='1.2',
+setup(name='fenixedu_api_sdk',
+		version='1.0',
 		description='FenixEdu API SDK for python',
 		author='Samuel Coelho',
 		author_email='samuelfcmc@gmail.com',
 		url='https://github.com/samfcmc/fenixedu-python-sdk',
-		py_modules=['fenix'],
+		py_modules=['fenixedu'],
 		install_requires=['requests']
 		)
