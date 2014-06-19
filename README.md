@@ -1,57 +1,57 @@
 fenix_python_sdk
 ================
 
-<b>Installation</b>
-<br>
+##Installation
 <code>pip install fenixedu_api_sdk</code>
-<br>
 
-<b>Configuration</b>
 
-Create a configurations file in your application project root:
-<br>
-<b>Clone this repo or just download fenixedu.sample.ini file</b>
-<br>
-- Copy file fenixedu.sample.ini to a new one called fenixedu.ini
-<br>
+## Configuration
+
+* Create a configurations file in your application project root:
+
+* Clone this repo or just download fenixedu.sample.ini file</b>
+
+* Copy file fenixedu.sample.ini to a new one called fenixedu.ini
+
 <code>cp fenixedu.sample.ini fenixedu.ini</code>
-<br>
-- Move it to your project's root
-<br>
-<code>mv fenixedu.ini project_dir</code>
-<br>
-- Edit fenixedu.ini file according to your app info
-<br>
 
-<b>Usage:</b>
-<br>
-- Import python sdk
-<br>
+* Move it to your project's root
+
+<code>mv fenixedu.ini project_dir</code>
+
+* Edit fenixedu.ini file according to your app info
+
+
+## Usage
+
+* Import python sdk
+
 <code>import fenixedu</code>
-<br>
-- Instatiate an API object in your source code
-<br>
+
+* Instatiate an API object in your source code
+
 <code>api = fenixedu.FenixEduAPISingleton()</code>
-<br>
-- Get the authentication url
-<br>
+
+* Get the authentication url
+
 <code>url = api.get_authentication_url()</code>
-<br>
-- Redirect your user to that url
-<br>
-- It will redirect the user to a url like:
-<br>
+
+* Redirect your user to that url
+
+* It will redirect the user to a url like:
+
 <code>redirect_uri?code=[code]</code>
-- Get the code parameter in url and do:
-<br>
+* Get the code parameter in url and do:
+
 <code>api.set_code(code)</code>
-<br>
-- It will request an access token and returns no erros if everything is fine
-<br>
-- Start using the api like this:
-<br>
+
+* It will request an access token and returns no erros if everything is fine
+
+* Start using the api like this:
+
 <code>person = api.get_person()</code>
-<br>
+
+
 
 <b>Multiple users using the same client</b>
 <br>
