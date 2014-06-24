@@ -9,21 +9,17 @@ except ImportError:
 	#For python version 2.x
 	from configparser import SafeConfigParser
 
+from user import User
+import endpoints
+
+ERROR_KEY = 'error'
+
 """ HTTP Methods """
 class Requests(object):
 	GET = 0
 	POST = 1
 	PUT = 2
 	DELETE = 3
-
-""" User: """
-class User(object):
-	def __init__(self, username = None, code = None, access_token = None, refresh_token = None, token_expires = None):
-		self.username = username
-		self.code = code
-		self.access_token = access_token
-		self.refresh_token = refresh_token
-		self.token_expires = token_expires
 
 class FenixEduAPISingleton(object):
 	__instance = None
@@ -57,33 +53,6 @@ class FenixEduAPISingleton(object):
 		self.api_endpoint = parser.get(section, 'api_endpoint')
 		self.api_version = parser.get(section, 'api_version')
 
-		""" API specific """
-		self.oauth_endpoint = 'oauth'
-		self.access_token_endpoint = 'access_token'
-		self.error_key = 'error'
-
-		""" User specific"""
-		self.access_token = ''
-		self.refresh_token = ''
-
-		""" API endpoints """
-		self.person_endpoint = 'person'
-		self.about_endpoint = 'about'
-		self.academic_terms_endpoint = 'academicterms'
-		self.courses_endpoint = 'courses'
-		self.evaluations_endpoint = 'evaluations'
-		self.schedule_endpoint = 'schedule'
-		self.groups_endpoint = 'groups'
-		self.students_endpoint = 'students'
-		self.degrees_endpoint = 'degrees'
-		self.calendar_endpoint = 'calendar'
-		self.payments_endpoint = 'payments'
-		self.spaces_endpoint = 'spaces'
-		self.classes_endpoint = 'classes'
-		self.curriculum_endpoint = 'curriculum'
-		self.refresh_token_endpoint = 'refresh_token'
-		self.curriculum_endpoint = 'curriculum'
-
 	def _get_api_url(self):
 		return self.base_url + self.api_endpoint + 'v' + str(self.api_version)
 
@@ -100,21 +69,13 @@ class FenixEduAPISingleton(object):
 			r = requests.put(url, params = params, headers = headers)
 		elif method == Requests.DELETE:
 			r = requests.delete(url, params = params, headers = headers)
-
-		print('API request: ' + r.url)
 		return r
 
-	def _api_private_request(self, endpoint, req_params=None, method=None, headers=None, user=None):
+	def _api_private_request(self, endpoint, user, req_params=None, method=None, headers=None):
 		req_params = req_params or {}
 		url = self._get_api_url() + '/' + endpoint
 
-		if user is None:
-			access_token = FenixEduAPISingleton.__single_user.access_token
-			user = FenixEduAPISingleton.__single_user
-		else:
-			access_token = user.access_token
-
-		req_params['access_token'] = access_token
+		req_params['access_token'] = user.access_token
 		r = self._request(url, req_params, method, headers = headers)
 		""" Check if everything was fine
 			If not: Try to refresh the access token """
@@ -125,8 +86,7 @@ class FenixEduAPISingleton(object):
 		return r
 
 	def _refresh_access_token(self, user):
-		print('Refreshing access token')
-		url = self.base_url + '/' + self.oauth_endpoint + '/' + self.refresh_token_endpoint
+		url = self.base_url + '/' + endpoints.OAUTH_ENDPOINT + '/' + self.refresh_token_endpoint
 		req_params = {'client_id' : self.client_id, 'client_secret' : self.client_secret, 'refresh_token' : user.refresh_token,
 				'grant_type' : 'refresh_token', 'redirect_uri' : self.redirect_uri, 'code' : user.code}
 		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
@@ -140,39 +100,30 @@ class FenixEduAPISingleton(object):
 		return self._request(url, params, method, headers = headers)
 
 	def get_authentication_url(self):
-		url = self.base_url + self.oauth_endpoint + '/userdialog?client_id=' + self.client_id + '&redirect_uri=' + self.redirect_uri
+		url = self.base_url + endpoints.OAUTH_ENDPOINT + '/userdialog?client_id=' + self.client_id + '&redirect_uri=' + self.redirect_uri
 		return url
 
-	def set_code(self, code, user = None):
-		url = self.base_url + self.oauth_endpoint + '/' + self.access_token_endpoint
-		r_params = {'client_id' : self.client_id, 'client_secret' : self.client_secret, 'redirect_uri' : self.redirect_uri, 'code' : code, 'grant_type' : 'authorization_code'}
+	def get_user_by_code(self, code):
+		url = self.base_url + endpoints.OAUTH_ENDPOINT + '/' + endpoints.ACCESS_TOKEN_ENDPOINT
+		r_params = {'client_id' : self.client_id,
+								'client_secret' : self.client_secret,
+								'redirect_uri' : self.redirect_uri,
+								'code' : code,
+								'grant_type' : 'authorization_code'}
 		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
 		r = self._request(url, params = r_params, method = Requests.POST, headers = r_headers)
-		r_object = r.json()
-		if self.error_key in r_object:
+		response = r.json()
+		if ERROR_KEY in response:
 			print('Error tryng to get an access token')
 			print(r_object)
 
-		# Just a single user
-		elif user is None:
-			FenixEduAPISingleton.__single_user.access_token = r_object['access_token']
-			FenixEduAPISingleton.__single_user.refresh_token = r_object['refresh_token']
-			FenixEduAPISingleton.__single_user.exprires = r_object['expires_in']
-			self.code = code
+		access_token = response['access_token']
+		refresh_token = response['refresh_token']
+		token_expires = response['expires_in']
+		user = User(access_token = access_token, refresh_token = refresh_token,
+								token_expires = token_expires)
 
-		# User has been passed (Using multiple users in same application)
-		else:
-			user.access_token = r_object['access_token']
-			user.refresh_token = r_object['refresh_token']
-			user.token_expires = r_object['expires_in']
-			user.code = code
-
-		# User has been passed (Using multiple users in same application)
-		else:
-			user.access_token = r_object['access_token']
-			user.refresh_token = r_object['refresh_token']
-			user.token_expires = r_object['expires_in']
-			user.code = code
+		return user
 
 	def set_access_token(self, token):
 		self.access_token = token
@@ -209,31 +160,31 @@ class FenixEduAPISingleton(object):
 	""" API methods """
 	""" Public Endpoints """
 	def get_about(self):
-		r = self._api_public_request(self.about_endpoint)
+		r = self._api_public_request(endpoints.ABOUT_ENDPOINT)
 		return r.json()
 
 	def get_academic_terms(self):
-		r = self._api_public_request(self.academic_terms_endpoint)
+		r = self._api_public_request(endpoints.ACADEMIC_TERMS_ENDPOINT)
 		return r.json()
 
 	def get_course(self, id):
-		r = self._api_public_request(self.courses_endpoint + '/' + id)
+		r = self._api_public_request(endpoints.COURSES_ENDPOINT + '/' + id)
 		return r.json()
 
 	def get_course_evaluations(self, id):
-		r = self._api_public_request(self.courses_endpoint + '/' + id + '/' + self.evaluations_endpoint)
+		r = self._api_public_request(endpoints.COURSES_ENDPOINT + '/' + id + '/' + endpoints.EVALUATIONS_ENDPOINT)
 		return r.json()
 
 	def get_course_groups(self, id):
-		r = self._api_public_request(self.courses_endpoint + '/' + id + '/' + self.groups_endpoint)
+		r = self._api_public_request(endpoints.COURSES_ENDPOINT + '/' + id + '/' + endpoints.GROUPS_ENDPOINT)
 		return r.json()
 
 	def get_course_schedule(self, id):
-		r = self._api_public_request(self.courses_endpoint + '/' + id + '/' + self.schedule_endpoint)
+		r = self._api_public_request(endpoints.COURSES_ENDPOINT + '/' + id + '/' + endpoints.SCHEDULE_ENDPOINT)
 		return r.json()
 
 	def get_course_students(self, id):
-		r = self._api_public_request(self.courses_endpoint + '/' + id + '/' + self.students_endpoint)
+		r = self._api_public_request(endpoints.COURSES_ENDPOINT + '/' + id + '/' + endpoints.STUDENTS_ENDPOINT)
 		return r.json()
 
 	def get_degrees(self, year=None):
@@ -241,7 +192,7 @@ class FenixEduAPISingleton(object):
 			params = {'year' : year}
 		else:
 			params = None
-		r = self._api_public_request(self.degrees_endpoint, params)
+		r = self._api_public_request(endpoints.DEGREES_ENDPOINT, params)
 		return r.json()
 
 	def get_degree(self, id, year=None):
@@ -250,15 +201,15 @@ class FenixEduAPISingleton(object):
 		else:
 			params = None
 
-		r = self._api_public_request(self.degrees_endpoint + '/' + id, params)
+		r = self._api_public_request(endpoints.DEGREES_ENDPOINT + '/' + id, params)
 		return r.json()
 
 	def get_degree_courses(self, id):
-		r = self._api_public_request(self.degrees_endpoint + '/' + id + '/' + self.courses_endpoint)
+		r = self._api_public_request(endpoints.DEGREES_ENDPOINT + '/' + id + '/' + endpoints.COURSES_ENDPOINT)
 		return r.json()
 
 	def get_spaces(self):
-		r = self._api_public_request(self.spaces_endpoint)
+		r = self._api_public_request(endpoints.SPACES_ENDPOINT)
 		return r.json()
 
 	def get_space(self, id, day=None):
@@ -266,51 +217,51 @@ class FenixEduAPISingleton(object):
 			params = {'day' : day}
 		else:
 			params = None
-		r = self._api_public_request(self.spaces_endpoint + '/' + id, params = params)
+		r = self._api_public_request(endpoints.SPACES_ENDPOINT + '/' + id, params = params)
 		return r.json()
 
 	""" Private Endpoints """
-	def get_person(self, user=None):
-		r = self._api_private_request(self.person_endpoint, user=user)
+	def get_person(self, user):
+		r = self._api_private_request(endpoints.PERSON_ENDPOINT, user=user)
 		return r.json()
 
-	def get_person_classes_calendar(self, user=None):
-		r = self._api_private_request(self.person_endpoint + '/' + self.calendar_endpoint + '/' + self.classes_endpoint, user=user)
+	def get_person_classes_calendar(self, user):
+		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.CALENDAR_ENDPOINT + '/' + endpoints.CLASSES_ENDPOINT, user=user)
 		return r.json()
 
-	def get_person_evaluations_calendar(self, user=None):
-		r = self._api_private_request(self.person_endpoint + '/' + self.calendar_endpoint + '/' + self.evaluations_endpoint, user=user)
+	def get_person_evaluations_calendar(self, user):
+		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.CALENDAR_ENDPOINT + '/' + endpoints.EVALUATIONS_ENDPOINT, user=user)
 		return r.json()
 
-	def get_person_curriculum(self, user=None):
-		r = self._api_private_request(self.person_endpoint + '/' + self.curriculum_endpoint, user=user)
+	def get_person_curriculum(self, user):
+		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.CURRICULUM_ENDPOINT, user=user)
 		return r.json()
 
-	def get_person_courses(self, academicTerm=None, user=None):
+	def get_person_courses(self, user, academicTerm=None):
 		params = {}
 
 		if academicTerm:
 			params['academicTerm'] = academicTerm
 
-		r = self._api_private_request(self.person_endpoint + '/' + self.courses_endpoint, params, user=user)
+		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.COURSES_ENDPOINT, params, user=user)
 		return r.json()
 
-	def get_person_evaluations(self, user=None):
-		r = self._api_private_request(self.person_endpoint + '/' + self.evaluations_endpoint, user=user)
+	def get_person_evaluations(self, user):
+		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.EVALUATIONS_ENDPOINT, user=user)
 		return r.json()
 
-	def get_person_payments(self, user=None):
-		r = self._api_private_request(self.person_endpoint + '/' + self.payments_endpoint, user=user)
+	def get_person_payments(self, user):
+		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.PAYMENTS_ENDPOINT, user=user)
 		return r.json()
 
-	def enrol_person_in_evaluation(self, id, enrol_action = None, user=None):
+	def enrol_person_in_evaluation(self, id, user, enrol_action = None):
 		if enrol_action:
 			params = {'enrol' : enrol_action}
 		else:
 			params = None
-		r = self._api_private_request(self.person_endpoint + '/' + self.evaluations_endpoint + '/' + id, params, Requests.PUT, user=user)
+		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.EVALUATIONS_ENDPOINT + '/' + id, params, Requests.PUT, user=user)
 		return r
 
-	def get_person_evaluation(self, id, user=None):
-		r = self._api_private_request(self.person_endpoint + '/' + self.evaluations_endpoint + '/' + id, user=user)
+	def get_person_evaluation(self, id, user):
+		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.EVALUATIONS_ENDPOINT + '/' + id, user=user)
 		return r
