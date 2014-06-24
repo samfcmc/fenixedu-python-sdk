@@ -17,12 +17,14 @@ fenix_python_sdk
 
 * Move it to your project's root
 
-<code>mv fenixedu.ini project_dir</code>
+<code>mv fenixedu.ini PROJECT_DIRECTORY</code>
 
 * Edit fenixedu.ini file according to your app info
 
 
 ## Usage
+
+### Authentication
 
 * Import python sdk
 
@@ -40,10 +42,10 @@ fenix_python_sdk
 
 * It will redirect the user to a url like:
 
-<code>redirect_uri?code=[code]</code>
+<code>redirect_uri?code=CODE</code>
 * Get the code parameter in url and do:
 
-<code>api.set_code(code)</code>
+<code>api.set_code(CODE)</code>
 
 * It will request an access token and returns no erros if everything is fine
 
@@ -51,84 +53,79 @@ fenix_python_sdk
 
 <code>person = api.get_person()</code>
 
+### Multiple users using the same client
+* As you have noticed, the client is a singleton. So you can't use with it if you have multiple users using your application at the same time (like a web application).
 
+* To use it with with multiple users:
 
-<b>Multiple users using the same client</b>
-<br>
-As you have noticed, the client is a singleton. So you can't use with it if you have multiple users using your application at the same time (like a web application).
-<br>
-To use it with with multiple users:
-<br>
-- Instatiate a user object
-<br>
+* Instatiate a user object
+
 <code>user = fenix.User()</code>
-<br>
-- When you get the code from the api (After the user logged in), you can pass the user object to set_code method like this:
-<br>
+
+* When you get the code from the api (After the user logged in), you can pass the user object to set_code method like this:
+
 <code>api.set_code(code, user)</code>
-<br>
-- After this, if nothing goes wrong, the user object will contain the access token, refresh token, etc.
-<br>
-- Now, you can use the private methods with that user. Example:
-<br>
+
+* After this, if nothing goes wrong, the user object will contain the access token, refresh token, etc.
+
+* Now, you can use the private methods with that user. Example:
+
 <code>person = api.get_person(user=user)</code>
-<br>
-- You can instatiate as many users as you want. If you don't instatiate an user, the FenixAPISingleton will use a singleton user object.
-<br>
 
-<b>Available methods</b>
-<br>
-[x] - Optional parameters
-<br>
-- All endpoint in FenixEdu API have a method in this sdk
-<br>
-- <b> Mapping between FenixAPISingleton api methods and original api endpoints </b>
-<br>
-API endpoint -> SDK FenixAPISingleton Methods
-<br>
-<b>- Public methods </b>
-<br>
-GET /about -> <code>get_about</code>
-<br>
-GET /academicterms -> <code>get_academic_terms</code>
-<br>
-GET /courses/{id} -> <code>get_course(id)</code>
-<br>
-GET /courses/{id}/evaluations -> <code>get_course_evaluations(id)</code>
-<br>
-GET /courses/{id}/groups -> <code>get_course_groups(id)</code>
-<br>
-GET /courses/{id}/schedule ->  <code>get_course_schedule(id)</code>
-<br>
-GET /courses/{id}/students ->  <code>get_course_students(id)</code>
-<br>
-GET /degrees -> <code>get_degrees([year])</code>
-<br>
-GET /degrees/{id} ->  <code>get_degree(id, [year])</code>
-<br>
-GET /degrees/{id}/courses -> <code>get_degree_courses(id, [year])</code>
-<br>
-GET /spaces -> <code>get_spaces()</code>
-<br>
-GET /spaces/{id} -> <code>get_space(id,[day])</code>
-<br>
-<b>- Private methods (You need to get an access token before calling one of this methods)</b>
-<br>
-GET /person -> <code>get_person([user])</code>
-<br>
-GET /person/calendar/classes -> <code>get_person_classes_calendar([user])</code>
-<br>
-GET /person/calendar/evaluations -> <code>get_person_evaluations_calendar([user])</code>
-<br>
-GET /person/courses -> <code>get_person_courses([sem], [year], [user])</code>
-<br>
-GET /person/evaluations -> <code>get_person_evaluations([user])</code>
-<br>
-GET /person/payments -> <code>get_person_payments([user])</code>
-<br>
-PUT /person/evaluations/{id} -> <code>enrol_in_evaluation(id, [enrol_action], [user])</code>
-<br>
-GET /person/curriculum -> <code>get_person_curriculum([user])</code>
-<br>
+* You can instatiate as many users as you want. If you don't instatiate an user, the FenixAPISingleton will use a singleton user object.
 
-More info about all available endpoints in <a href="http://fenixedu.org/dev/api/">FenixEdu API website</a>
+### Full endpoint list
+
+* '[x]' - Optional parameters
+
+* All endpoint in FenixEdu API have a method in this sdk
+
+* Mapping between FenixAPISingleton api methods and original api endpoints 
+
+* API endpoint -> SDK FenixAPISingleton Methods
+
+#### Public methods 
+
+* GET /about -> <code>get_about</code>
+
+* GET /academicterms -> <code>get_academic_terms</code>
+
+* GET /courses/{id} -> <code>get_course(id)</code>
+
+* GET /courses/{id}/evaluations -> <code>get_course_evaluations(id)</code>
+
+* GET /courses/{id}/groups -> <code>get_course_groups(id)</code>
+
+* GET /courses/{id}/schedule ->  <code>get_course_schedule(id)</code>
+
+* GET /courses/{id}/students ->  <code>get_course_students(id)</code>
+
+* GET /degrees -> <code>get_degrees([year])</code>
+
+* GET /degrees/{id} ->  <code>get_degree(id, [year])</code>
+
+* GET /degrees/{id}/courses -> <code>get_degree_courses(id, [year])</code>
+
+* GET /spaces -> <code>get_spaces()</code>
+
+* GET /spaces/{id} -> <code>get_space(id,[day])</code>
+
+#### Private methods (You need to get an access token before calling one of this methods)</b>
+
+* GET /person -> <code>get_person([user])</code>
+
+* GET /person/calendar/classes -> <code>get_person_classes_calendar([user])</code>
+
+* GET /person/calendar/evaluations -> <code>get_person_evaluations_calendar([user])</code>
+
+* GET /person/courses -> <code>get_person_courses([sem], [year], [user])</code>
+
+* GET /person/evaluations -> <code>get_person_evaluations([user])</code>
+
+* GET /person/payments -> <code>get_person_payments([user])</code>
+
+* PUT /person/evaluations/{id} -> <code>enrol_in_evaluation(id, [enrol_action], [user])</code>
+
+* GET /person/curriculum -> <code>get_person_curriculum([user])</code>
+
+#### More info about all available endpoints in <a href="http://fenixedu.org/dev/api/">FenixEdu API website</a>
