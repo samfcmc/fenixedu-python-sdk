@@ -1,7 +1,7 @@
 fenix_python_sdk
 ================
 
-##Installation
+## Installation
 <code>pip install fenixedu_api_sdk</code>
 
 
@@ -21,10 +21,9 @@ fenix_python_sdk
 
 * Edit fenixedu.ini file according to your app info
 
-
 ## Usage
 
-### Authentication
+### Instantiating the client
 
 * Import python sdk
 
@@ -33,6 +32,8 @@ fenix_python_sdk
 * Instatiate an API object in your source code
 
 <code>client = fenixedu.FenixEduAPISingleton()</code>
+
+### Authentication
 
 * Get the authentication url
 
@@ -43,6 +44,7 @@ fenix_python_sdk
 * It will redirect the user to a url like:
 
 <code>redirect_uri?code=CODE</code>
+
 * Get the code parameter in url and get an object with the user details:
 
 <code>user = client.get_user_by_code(CODE)</code>
