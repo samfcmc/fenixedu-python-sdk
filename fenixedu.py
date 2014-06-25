@@ -3,15 +3,10 @@ FENIX SDK source code :)
 """
 
 import requests
-try:
-	from ConfigParser import SafeConfigParser
-except ImportError:
-	#For python version 2.x
-	from configparser import SafeConfigParser
-
 from user import User
 import endpoints
 from request_methods import Requests
+from configuration import FenixEduConfiguration
 
 ERROR_KEY = 'error'
 
@@ -21,9 +16,9 @@ class FenixEduAPISingleton(object):
 	__single_user = None
 
 	"""Make this class a singleton"""
-	def __new__(cls):
+	def __new__(cls, config):
 		if FenixEduAPISingleton.__instance is None:
-			FenixEduAPISingleton.__instance = object.__new__(cls)
+			FenixEduAPISingleton.__instance = object.__new__(cls, config)
 			FenixEduAPISingleton.__single_user = User()
 		return FenixEduAPISingleton.__instance
 
@@ -33,22 +28,11 @@ class FenixEduAPISingleton(object):
 	def get_val(self):
 		return self.val
 
-	def __init__(self):
-		""" Read settings from configuration file"""
-		parser = SafeConfigParser()
-		section = 'fenixedu'
-		parser.read('fenixedu.ini')
-
-		self.client_id = parser.get(section, 'client_id')
-		self.redirect_uri = parser.get(section, 'redirect_uri')
-		self.client_secret = parser.get(section, 'client_secret')
-
-		self.base_url = parser.get(section, 'base_url')
-		self.api_endpoint = parser.get(section, 'api_endpoint')
-		self.api_version = parser.get(section, 'api_version')
+	def __init__(self, config):
+		self.config = config
 
 	def _get_api_url(self):
-		return self.base_url + self.api_endpoint + 'v' + str(self.api_version)
+		return self.config.base_url + self.config.api_endpoint + 'v' + str(self.config.api_version)
 
 	""" Method to make a http request
 		If no method parameter is passed it will make a Get
@@ -77,12 +61,12 @@ class FenixEduAPISingleton(object):
 		return r
 
 	def _refresh_access_token(self, user):
-		url = self.base_url + '/' + endpoints.OAUTH_ENDPOINT + '/' + self.refresh_token_endpoint
-		req_params = {'client_id' : self.client_id,
-									'client_secret' : self.client_secret,
+		url = self.config.client_secret + '/' + endpoints.OAUTH_ENDPOINT + '/' + self.refresh_token_endpoint
+		req_params = {'client_id' : self.config.client_id,
+									'client_secret' : self.config.client_secret,
 									'refresh_token' : user.refresh_token,
 									'grant_type' : 'refresh_token',
-									'redirect_uri' : self.redirect_uri,
+									'redirect_uri' : self.config.redirect_url,
 									'code' : user.code}
 		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
 		r = self._request(url, params = req_params, method = Requests.POST, headers = r_headers)
@@ -95,14 +79,14 @@ class FenixEduAPISingleton(object):
 		return self._request(url, params, method, headers = headers)
 
 	def get_authentication_url(self):
-		url = self.base_url + endpoints.OAUTH_ENDPOINT + '/userdialog?client_id=' + self.client_id + '&redirect_uri=' + self.redirect_uri
+		url = self.config.client_secret + endpoints.OAUTH_ENDPOINT + '/userdialog?client_id=' + self.config.client_id + '&redirect_uri=' + self.config.redirect_url
 		return url
 
 	def get_user_by_code(self, code):
-		url = self.base_url + endpoints.OAUTH_ENDPOINT + '/' + endpoints.ACCESS_TOKEN_ENDPOINT
-		r_params = {'client_id' : self.client_id,
-								'client_secret' : self.client_secret,
-								'redirect_uri' : self.redirect_uri,
+		url = self.config.client_secret + endpoints.OAUTH_ENDPOINT + '/' + endpoints.ACCESS_TOKEN_ENDPOINT
+		r_params = {'client_id' : self.config.client_id,
+								'client_secret' : self.config.client_secret,
+								'redirect_uri' : self.config.redirect_url,
 								'code' : code,
 								'grant_type' : 'authorization_code'}
 		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
@@ -249,7 +233,7 @@ class FenixEduAPISingleton(object):
 		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.PAYMENTS_ENDPOINT, user=user)
 		return r.json()
 
-	def enrol_person_in_evaluation(self, id, user, enrol_action = None):
+	def enrol_person_in_evaluation(self, user, id, enrol_action = None):
 		if enrol_action:
 			params = {'enrol' : enrol_action}
 		else:
