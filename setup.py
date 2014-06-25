@@ -5,7 +5,7 @@
 from distutils.core import setup
 
 setup(name='fenixedu_api_sdk',
-		version='1.0',
+		version='2.0',
 		description='FenixEdu API SDK for python',
 		author='Samuel Coelho',
 		author_email='samuelfcmc@gmail.com',
