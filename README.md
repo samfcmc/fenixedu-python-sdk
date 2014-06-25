@@ -1,7 +1,7 @@
 fenix_python_sdk
 ================
 
-##Installation
+## Installation
 <code>pip install fenixedu_api_sdk</code>
 
 
@@ -21,10 +21,9 @@ fenix_python_sdk
 
 * Edit fenixedu.ini file according to your app info
 
-
 ## Usage
 
-### Authentication
+### Instantiating the client
 
 * Import python sdk
 
@@ -32,47 +31,46 @@ fenix_python_sdk
 
 * Instatiate an API object in your source code
 
-<code>api = fenixedu.FenixEduAPISingleton()</code>
+<code>client = fenixedu.FenixEduAPISingleton()</code>
+
+### Authentication
 
 * Get the authentication url
 
-<code>url = api.get_authentication_url()</code>
+<code>url = client.get_authentication_url()</code>
 
 * Redirect your user to that url
 
 * It will redirect the user to a url like:
 
 <code>redirect_uri?code=CODE</code>
-* Get the code parameter in url and do:
 
-<code>api.set_code(CODE)</code>
+* Get the code parameter in url and get an object with the user details:
+
+<code>user = client.get_user_by_code(CODE)</code>
 
 * It will request an access token and returns no erros if everything is fine
 
-* Start using the api like this:
+* This user object now can be used to make requests that belong to the private scope like:
 
-<code>person = api.get_person()</code>
+<code>person = client.get_person(user)</code>
 
-### Multiple users using the same client
-* As you have noticed, the client is a singleton. So you can't use with it if you have multiple users using your application at the same time (like a web application).
+### Examples
 
-* To use it with with multiple users:
+#### Get degrees
+<code>degrees = client.get_degrees()</code>
 
-* Instatiate a user object
+#### Get spaces
+<code>spaces = client.get_spaces()</code>
 
-<code>user = fenix.User()</code>
+#### Get information about the user
+<code>person = client.get_person(user)</code>
 
-* When you get the code from the api (After the user logged in), you can pass the user object to set_code method like this:
+#### Get user's classes calendar
+<code>classes = client.get_person_calendar_classes(user)</code>
 
-<code>api.set_code(code, user)</code>
-
-* After this, if nothing goes wrong, the user object will contain the access token, refresh token, etc.
-
-* Now, you can use the private methods with that user. Example:
-
-<code>person = api.get_person(user=user)</code>
-
-* You can instatiate as many users as you want. If you don't instatiate an user, the FenixAPISingleton will use a singleton user object.
+#### Get user's payments
+<code>payments = client.get_person_payments(user)</code>
 
 ### Full endpoint list
 
@@ -112,20 +110,20 @@ fenix_python_sdk
 
 #### Private methods (You need to get an access token before calling one of this methods)</b>
 
-* GET /person -> <code>get_person([user])</code>
+* GET /person -> <code>get_person(user)</code>
 
-* GET /person/calendar/classes -> <code>get_person_classes_calendar([user])</code>
+* GET /person/calendar/classes -> <code>get_person_classes_calendar(user)</code>
 
-* GET /person/calendar/evaluations -> <code>get_person_evaluations_calendar([user])</code>
+* GET /person/calendar/evaluations -> <code>get_person_evaluations_calendar(user)</code>
 
-* GET /person/courses -> <code>get_person_courses([sem], [year], [user])</code>
+* GET /person/courses -> <code>get_person_courses(user, [academicTerm])</code>
 
-* GET /person/evaluations -> <code>get_person_evaluations([user])</code>
+* GET /person/evaluations -> <code>get_person_evaluations(user)</code>
 
-* GET /person/payments -> <code>get_person_payments([user])</code>
+* GET /person/payments -> <code>get_person_payments(user)</code>
 
-* PUT /person/evaluations/{id} -> <code>enrol_in_evaluation(id, [enrol_action], [user])</code>
+* PUT /person/evaluations/{id} -> <code>enrol_in_evaluation(id, user, [enrol_action])</code>
 
-* GET /person/curriculum -> <code>get_person_curriculum([user])</code>
+* GET /person/curriculum -> <code>get_person_curriculum(user)</code>
 
 #### More info about all available endpoints in <a href="http://fenixedu.org/dev/api/">FenixEdu API website</a>
