@@ -29,9 +29,18 @@ fenix_python_sdk
 
 <code>import fenixedu</code>
 
-* Instatiate an API object in your source code
+#### Instantiating a configuration object
 
-<code>client = fenixedu.FenixEduAPISingleton()</code>
+##### From a configuration file
+
+<code>config = fenixedu.FenixEduConfiguration.fromConfigFile(FILENAME)</code>
+
+* If no FILENAME is provided it will use the default one 'fenixedu.ini'
+
+##### Instantiating the client
+* Instantiate an API client object in your source code
+
+<code>client = fenixedu.FenixEduAPISingleton(config)</code>
 
 ### Authentication
 
@@ -78,11 +87,11 @@ fenix_python_sdk
 
 * All endpoint in FenixEdu API have a method in this sdk
 
-* Mapping between FenixAPISingleton api methods and original api endpoints 
+* Mapping between FenixAPISingleton api methods and original api endpoints
 
 * API endpoint -> SDK FenixAPISingleton Methods
 
-#### Public methods 
+#### Public methods
 
 * GET /about -> <code>get_about</code>
 
