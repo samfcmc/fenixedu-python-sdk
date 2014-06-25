@@ -11,15 +11,9 @@ except ImportError:
 
 from user import User
 import endpoints
+from request_methods import Requests
 
 ERROR_KEY = 'error'
-
-""" HTTP Methods """
-class Requests(object):
-	GET = 0
-	POST = 1
-	PUT = 2
-	DELETE = 3
 
 class FenixEduAPISingleton(object):
 	__instance = None
@@ -61,36 +55,37 @@ class FenixEduAPISingleton(object):
 			request by default """
 	def _request(self, url, params=None, method=None, headers=None):
 
-		if method is None or method == Requests.GET:
-			r = requests.get(url, params = params, headers = headers)
-		elif method == Requests.POST:
-			r = requests.post(url, params = params, headers = headers)
-		elif method == Requests.PUT:
-			r = requests.put(url, params = params, headers = headers)
-		elif method == Requests.DELETE:
-			r = requests.delete(url, params = params, headers = headers)
+		if method is None:
+			method = Requests.GET
+
+		r = method.perform_request(url, params, headers)
+
 		return r
 
-	def _api_private_request(self, endpoint, user, req_params=None, method=None, headers=None):
-		req_params = req_params or {}
+	def _api_private_request(self, endpoint, user, params=None, method=None, headers=None):
+		params = params or {}
 		url = self._get_api_url() + '/' + endpoint
 
-		req_params['access_token'] = user.access_token
-		r = self._request(url, req_params, method, headers = headers)
+		params['access_token'] = user.access_token
+		r = self._request(url, params = params, method = method, headers = headers)
 		""" Check if everything was fine
 			If not: Try to refresh the access token """
 		if r.status_code == 401:
 			self._refresh_access_token(user)
 			""" Repeat the request """
-			r = self._request(url, req_params, method, headers = headers)
+			r = self._request(url, params = params, method = method, headers = headers)
 		return r
 
 	def _refresh_access_token(self, user):
 		url = self.base_url + '/' + endpoints.OAUTH_ENDPOINT + '/' + self.refresh_token_endpoint
-		req_params = {'client_id' : self.client_id, 'client_secret' : self.client_secret, 'refresh_token' : user.refresh_token,
-				'grant_type' : 'refresh_token', 'redirect_uri' : self.redirect_uri, 'code' : user.code}
+		req_params = {'client_id' : self.client_id,
+									'client_secret' : self.client_secret,
+									'refresh_token' : user.refresh_token,
+									'grant_type' : 'refresh_token',
+									'redirect_uri' : self.redirect_uri,
+									'code' : user.code}
 		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
-		r = self._request(url, req_params, Requests.POST, headers = r_headers)
+		r = self._request(url, params = req_params, method = Requests.POST, headers = r_headers)
 		refresh = r.json()
 		user.access_token = refresh['access_token']
 		user.token_exprires = refresh['expires_in']
@@ -243,7 +238,7 @@ class FenixEduAPISingleton(object):
 		if academicTerm:
 			params['academicTerm'] = academicTerm
 
-		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.COURSES_ENDPOINT, params, user=user)
+		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.COURSES_ENDPOINT, params = params, user=user)
 		return r.json()
 
 	def get_person_evaluations(self, user):
@@ -259,7 +254,7 @@ class FenixEduAPISingleton(object):
 			params = {'enrol' : enrol_action}
 		else:
 			params = None
-		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.EVALUATIONS_ENDPOINT + '/' + id, params, Requests.PUT, user=user)
+		r = self._api_private_request(endpoints.PERSON_ENDPOINT + '/' + endpoints.EVALUATIONS_ENDPOINT + '/' + id, params = params, method = Requests.PUT, user=user)
 		return r
 
 	def get_person_evaluation(self, id, user):
