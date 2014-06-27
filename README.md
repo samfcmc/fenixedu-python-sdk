@@ -4,23 +4,6 @@ fenix_python_sdk
 ## Installation
 <code>pip install fenixedu_api_sdk</code>
 
-
-## Configuration
-
-* Create a configurations file in your application project root:
-
-* Clone this repo or just download fenixedu.sample.ini file</b>
-
-* Copy file fenixedu.sample.ini to a new one called fenixedu.ini
-
-<code>cp fenixedu.sample.ini fenixedu.ini</code>
-
-* Move it to your project's root
-
-<code>mv fenixedu.ini PROJECT_DIRECTORY</code>
-
-* Edit fenixedu.ini file according to your app info
-
 ## Usage
 
 ### Instantiating the client
@@ -31,11 +14,25 @@ fenix_python_sdk
 
 #### Instantiating a configuration object
 
-##### From a configuration file
+##### Using a configuration file
 
-<code>config = fenixedu.FenixEduConfiguration.fromConfigFile(FILENAME)</code>
+* Clone this repository or just download fenixedu.sample.ini file</b>
 
-* If no FILENAME is provided it will use the default one 'fenixedu.ini'
+* Copy file fenixedu.sample.ini to a new one named 'fenixedu.ini' or with another name if you want
+
+<code>cp fenixedu.sample.ini FILENAME</code>
+
+* Edit the file according to your application info
+
+* Instantiate a configuration object using the file
+
+<code>config = fenixedu.FenixEduConfiguration.fromConfigFile('FILENAME')</code>
+
+* If no FILENAME is provided it will use 'fenixedu.ini'
+
+##### Without a configuration file
+
+<code>config = fenixedu.FenixEduConfiguration('CLIENT_ID, 'REDIRECT_URI', 'CLIENT_SECRET', 'BASE_URL')</code>
 
 ##### Instantiating the client
 * Instantiate an API client object in your source code
@@ -44,21 +41,21 @@ fenix_python_sdk
 
 ### Authentication
 
-* Get the authentication url
+* Get the authentication URL
 
 <code>url = client.get_authentication_url()</code>
 
-* Redirect your user to that url
+* Redirect your user to that URL
 
-* It will redirect the user to a url like:
+* If the user authorizes your application he will be redirected to an URL like:
 
 <code>redirect_uri?code=CODE</code>
 
-* Get the code parameter in url and get an object with the user details:
+* Get the code parameter in URL and get an object with the user details:
 
 <code>user = client.get_user_by_code(CODE)</code>
 
-* It will request an access token and returns no erros if everything is fine
+* It will request an access token and returns no errors if everything is fine
 
 * This user object now can be used to make requests that belong to the private scope like:
 
@@ -85,9 +82,9 @@ fenix_python_sdk
 
 * '[x]' - Optional parameters
 
-* All endpoint in FenixEdu API have a method in this sdk
+* All endpoint in FenixEdu API have a method in this SDK
 
-* Mapping between FenixAPISingleton api methods and original api endpoints
+* Mapping between FenixAPISingleton api methods and original API endpoints
 
 * API endpoint -> SDK FenixAPISingleton Methods
 
