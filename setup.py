@@ -2,14 +2,14 @@
 
 #!/usr/bin/env python
 
-from distutils.core import setup
+from distutils.core import setup, Extension
 
 setup(name='fenixedu_api_sdk',
-		version='2.0',
+		version='2.0.1',
 		description='FenixEdu API SDK for python',
 		author='Samuel Coelho',
 		author_email='samuelfcmc@gmail.com',
 		url='https://github.com/samfcmc/fenixedu-python-sdk',
-		py_modules=['fenixedu'],
-		install_requires=['requests']
+		install_requires=['requests'],
+		packages=['fenixedu']
 		)

@@ -79,7 +79,7 @@ class FenixEduAPISingleton(object):
 		return self._request(url, params, method, headers = headers)
 
 	def get_authentication_url(self):
-		url = self.config.client_secret + endpoints.OAUTH_ENDPOINT + '/userdialog?client_id=' + self.config.client_id + '&redirect_uri=' + self.config.redirect_url
+		url = self.config.client_secret + endpoints.OAUTH_ENDPOINT + '/userdialog?client_id=' + self.config.client_id + '&redirect_uri=' + self.config.redirect_uri
 		return url
 
 	def get_user_by_code(self, code):
