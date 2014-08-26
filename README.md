@@ -34,10 +34,10 @@ fenix_python_sdk
 
 <code>config = fenixedu.FenixEduConfiguration('CLIENT_ID, 'REDIRECT_URI', 'CLIENT_SECRET', 'BASE_URL')</code>
 
-##### Instantiating the client
+#### Instantiating the client
 * Instantiate an API client object in your source code
 
-<code>client = fenixedu.FenixEduAPISingleton(config)</code>
+<code>client = fenixedu.FenixEduClient(config)</code>
 
 ### Authentication
 
@@ -47,7 +47,7 @@ fenix_python_sdk
 
 * Redirect your user to that URL
 
-* If the user authorizes your application he will be redirected to an URL like:
+* If the user authorizes your application he will be redirected to an URL like this:
 
 <code>redirect_uri?code=CODE</code>
 
@@ -57,11 +57,11 @@ fenix_python_sdk
 
 * It will request an access token and returns no errors if everything is fine
 
-* This user object now can be used to make requests that belong to the private scope like:
+* This user object now can be used to make requests that belong to the private scope like this one:
 
 <code>person = client.get_person(user)</code>
 
-### Examples
+### Examples of usage
 
 #### Get degrees
 <code>degrees = client.get_degrees()</code>
@@ -82,7 +82,7 @@ fenix_python_sdk
 
 * '[x]' - Optional parameters
 
-* All endpoint in FenixEdu API have a method in this SDK
+* All endpoints in FenixEdu API have a method in this SDK
 
 * Mapping between FenixAPISingleton api methods and original API endpoints
 
