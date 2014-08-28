@@ -210,10 +210,6 @@ class FenixEduClient(object):
 		r = self._api_private_request(endpoints.PERSON_EVALUATION, params = params, method = Requests.PUT, user=user, endpoint_params={'id': id})
 		return r
 
-	def get_person_evaluation(self, user, id):
-		r = self._api_private_request(endpoints.PERSON_EVALUATION, user=user, endpoint_params={'id': id})
-		return r
-
 	def get_person_payments(self, user):
 		r = self._api_private_request(endpoints.PERSON + '/' + endpoints.PAYMENTS, user=user)
 		return r.json()

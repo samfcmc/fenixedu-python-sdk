@@ -128,7 +128,7 @@ fenix_python_sdk
 
 * GET /person/payments -> <code>get_person_payments(user)</code>
 
-* PUT /person/evaluations/{id} -> <code>enrol_in_evaluation(id, user, [enrol_action])</code>
+* PUT /person/evaluations/{id} -> <code>enrol_in_evaluation(user, id, [enrol_action])</code>
 
 * GET /person/curriculum -> <code>get_person_curriculum(user)</code>
 
