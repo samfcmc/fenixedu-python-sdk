@@ -114,7 +114,7 @@ fenix_python_sdk
 
 * GET /spaces/{id} -> <code>get_space(id,[day])</code>
 
-#### Private methods (You need to get an access token before calling one of this methods)</b>
+#### Private methods (You need to get an access token before calling one of these methods)</b>
 
 * GET /person -> <code>get_person(user)</code>
 
