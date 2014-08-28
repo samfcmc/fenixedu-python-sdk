@@ -2,7 +2,7 @@ fenix_python_sdk
 ================
 
 ## Installation
-<code>pip install fenixedu_api_sdk</code>
+<code>pip install fenixedu</code>
 
 ## Usage
 
