@@ -153,11 +153,11 @@ class FenixEduClient(object):
 		else:
 			params = None
 
-		r = self._api_public_request(endpoints.DEGREE, {'id': id})
+		r = self._api_public_request(endpoints.DEGREE, endpoint_params={'id': id})
 		return r.json()
 
 	def get_degree_courses(self, id):
-		r = self._api_public_request(endpoints.DEGREE_COURSES, {'id': id})
+		r = self._api_public_request(endpoints.DEGREE_COURSES, endpoint_params={'id': id})
 		return r.json()
 
 	def get_spaces(self):
@@ -202,10 +202,6 @@ class FenixEduClient(object):
 		r = self._api_private_request(endpoints.PERSON_EVALUATIONS, user=user)
 		return r.json()
 
-	def get_person_payments(self, user):
-		r = self._api_private_request(endpoints.PERSON + '/' + endpoints.PAYMENTS, user=user)
-		return r.json()
-
 	def enrol_person_in_evaluation(self, user, id, enrol_action = None):
 		if enrol_action:
 			params = {'enrol' : enrol_action}
@@ -214,6 +210,10 @@ class FenixEduClient(object):
 		r = self._api_private_request(endpoints.PERSON_EVALUATION, params = params, method = Requests.PUT, user=user, endpoint_params={'id': id})
 		return r
 
-	def get_person_evaluation(self, id, user):
+	def get_person_evaluation(self, user, id):
 		r = self._api_private_request(endpoints.PERSON_EVALUATION, user=user, endpoint_params={'id': id})
 		return r
+
+	def get_person_payments(self, user):
+		r = self._api_private_request(endpoints.PERSON + '/' + endpoints.PAYMENTS, user=user)
+		return r.json()

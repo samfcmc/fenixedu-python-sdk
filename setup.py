@@ -4,7 +4,7 @@
 
 from distutils.core import setup, Extension
 
-setup(name='fenixedu_api_sdk',
+setup(name='fenixedu',
 		version='2.0.1',
 		description='FenixEdu API SDK for python',
 		author='Samuel Coelho',
