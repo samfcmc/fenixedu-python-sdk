@@ -41,7 +41,7 @@ config = fenixedu.FenixEduConfiguration.fromConfigFile('FILENAME')
 ##### Without a configuration file
 
 ```python
-config = fenixedu.FenixEduConfiguration('CLIENT_ID, 'REDIRECT_URI', 'CLIENT_SECRET', 'BASE_URL')
+config = fenixedu.FenixEduConfiguration('CLIENT_ID', 'REDIRECT_URI', 'CLIENT_SECRET', 'BASE_URL')
 ```
 
 #### Instantiating the client
