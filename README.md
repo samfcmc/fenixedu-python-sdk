@@ -2,7 +2,9 @@ fenix_python_sdk
 ================
 
 ## Installation
-<code>pip install fenixedu</code>
+```
+pip install fenixedu
+```
 
 ## Usage
 
@@ -10,7 +12,9 @@ fenix_python_sdk
 
 * Import python sdk
 
-<code>import fenixedu</code>
+```
+import fenixedu
+```
 
 #### Instantiating a configuration object
 
@@ -20,63 +24,89 @@ fenix_python_sdk
 
 * Copy file fenixedu.sample.ini to a new one named 'fenixedu.ini' or with another name if you want
 
-<code>cp fenixedu.sample.ini FILENAME</code>
+```
+cp fenixedu.sample.ini FILENAME
+```
 
 * Edit the file according to your application info
 
 * Instantiate a configuration object using the file
 
-<code>config = fenixedu.FenixEduConfiguration.fromConfigFile('FILENAME')</code>
+```python
+config = fenixedu.FenixEduConfiguration.fromConfigFile('FILENAME')
+```
 
 * If no FILENAME is provided it will use 'fenixedu.ini'
 
 ##### Without a configuration file
 
-<code>config = fenixedu.FenixEduConfiguration('CLIENT_ID, 'REDIRECT_URI', 'CLIENT_SECRET', 'BASE_URL')</code>
+```python
+config = fenixedu.FenixEduConfiguration('CLIENT_ID, 'REDIRECT_URI', 'CLIENT_SECRET', 'BASE_URL')
+```
 
 #### Instantiating the client
 * Instantiate an API client object in your source code
 
-<code>client = fenixedu.FenixEduClient(config)</code>
+```python
+client = fenixedu.FenixEduClient(config)
+```
 
 ### Authentication
 
 * Get the authentication URL
 
-<code>url = client.get_authentication_url()</code>
+```python
+url = client.get_authentication_url()
+```
 
 * Redirect your user to that URL
 
 * If the user authorizes your application he will be redirected to an URL like this:
 
-<code>redirect_uri?code=CODE</code>
+```
+redirect_uri?code=CODE
+```
 
 * Get the code parameter in URL and get an object with the user details:
 
-<code>user = client.get_user_by_code(CODE)</code>
+```python
+user = client.get_user_by_code('CODE')
+```
 
 * It will request an access token and returns no errors if everything is fine
 
 * This user object now can be used to make requests that belong to the private scope like this one:
 
-<code>person = client.get_person(user)</code>
+```python
+person = client.get_person(user)
+```
 
 ### Examples of usage
 
 #### Get degrees
-<code>degrees = client.get_degrees()</code>
+```python
+degrees = client.get_degrees()
+```
 
 #### Get spaces
-<code>spaces = client.get_spaces()</code>
+```python
+spaces = client.get_spaces()
+```
 
 #### Get information about the user
-<code>person = client.get_person(user)</code>
+```python
+person = client.get_person(user)
+```
 
 #### Get user's classes calendar
-<code>classes = client.get_person_calendar_classes(user)</code>
+```python
+classes = client.get_person_calendar_classes(user)
+```
 
 #### Get user's payments
-<code>payments = client.get_person_payments(user)</code>
+```python
+payments = client.get_person_payments(user)
+```
 
 ### Full endpoint list
 
