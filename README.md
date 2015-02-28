@@ -1,4 +1,4 @@
-fenix_python_sdk
+fenix_python_sdk <img src="https://travis-ci.org/samfcmc/fenixedu-python-sdk.svg?branch=master">
 ================
 
 ## Installation
