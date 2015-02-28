@@ -40,3 +40,6 @@ fenixedu.ini
 
 # Files created to test api
 test*.py
+
+# Virtual environment
+env/
