@@ -3,7 +3,7 @@ fenix_python_sdk <img src="https://travis-ci.org/samfcmc/fenixedu-python-sdk.svg
 
 ## Installation
 ```
-pip install fenixedu
+$ pip install fenixedu
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ import fenixedu
 * Copy file fenixedu.sample.ini to a new one named 'fenixedu.ini' or with another name if you want
 
 ```
-cp fenixedu.sample.ini FILENAME
+$ cp fenixedu.sample.ini FILENAME
 ```
 
 * Edit the file according to your application info
