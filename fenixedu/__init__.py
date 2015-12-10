@@ -65,18 +65,18 @@ class FenixEduClient(object):
 		return r
 
 	def _refresh_access_token(self, user):
-		url = self._get_oauth_endpoint_url(self.refresh_token)
+		url = self._get_oauth_endpoint_url(endpoints.REFRESH_TOKEN)
 		req_params = {'client_id' : self.config.client_id,
 									'client_secret' : self.config.client_secret,
 									'refresh_token' : user.refresh_token,
 									'grant_type' : 'refresh_token',
-									'redirect_uri' : self.config.redirect_url,
+									'redirect_uri' : self.config.redirect_uri,
 									'code' : user.code}
 		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
 		r = self._request(url, params = req_params, method = Requests.POST, headers = r_headers)
 		refresh = r.json()
 		user.access_token = refresh['access_token']
-		user.token_exprires = refresh['expires_in']
+		user.token_expires = refresh['expires_in']
 
 	def _api_public_request(self, endpoint, params=None, method=None, headers=None, endpoint_params=None):
 		url = self._get_api_endpoint_url(endpoint, endpoint_params)
