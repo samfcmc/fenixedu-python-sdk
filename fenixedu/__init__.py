@@ -70,8 +70,7 @@ class FenixEduClient(object):
 									'client_secret' : self.config.client_secret,
 									'refresh_token' : user.refresh_token,
 									'grant_type' : 'refresh_token',
-									'redirect_uri' : self.config.redirect_uri,
-									'code' : user.code}
+									'redirect_uri' : self.config.redirect_uri}
 		r_headers = {'content-type' : 'application/x-www-form-urlencoded'}
 		r = self._request(url, params = req_params, method = Requests.POST, headers = r_headers)
 		refresh = r.json()
