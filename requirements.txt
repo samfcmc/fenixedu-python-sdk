@@ -1,2 +1,2 @@
 configparser==3.3.0.post2
-requests==2.5.3
+requests==2.20.0
